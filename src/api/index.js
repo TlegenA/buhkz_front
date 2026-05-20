@@ -1,7 +1,8 @@
-const BASE = "/api";
+const BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
 
 async function request(path, options = {}) {
-  const res = await fetch(BASE + path, options);
+  const url = BASE + "/api" + path;
+  const res = await fetch(url, options);
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));
     throw new Error(err.detail || `HTTP ${res.status}`);
