@@ -11,7 +11,7 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      "/api": "http://localhost:8000",
+      "/api": "https://buhkzbackend-production.up.railway.app",
     },
   },
   define: {

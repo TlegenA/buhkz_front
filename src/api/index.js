@@ -1,4 +1,4 @@
-const BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
+const BASE = import.meta.env.VITE_API_BASE_URL ?? "";
 
 async function request(path, options = {}) {
   const url = BASE + "/api" + path;
@@ -15,7 +15,7 @@ export const api = {
     const qs = new URLSearchParams(
       Object.fromEntries(Object.entries(params).filter(([, v]) => v))
     ).toString();
-    return request(`/calendar${qs ? "?" + qs : ""}`);
+    return request(`/calendar/${qs ? "?" + qs : ""}`);
   },
 
   getRates: () => request("/rates/"),
