@@ -50,12 +50,17 @@ export default function Rates() {
   const byCode = Object.fromEntries(rates.map((r) => [r.code, r]));
   const mrp = byCode["mrp"];
   const mzp = byCode["mzp"];
+  const nds = byCode["nds"];
+  const ipn = byCode["ipn"];
+  const ipn_high = byCode["ipn_high"];
+  const kpn = byCode["kpn"];
+  const year = mrp ? new Date(mrp.valid_from).getFullYear() : new Date().getFullYear();
 
   return (
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold tracking-tight">Справочник ставок</h1>
-        <p className="text-muted-foreground mt-1">Актуальные налоговые ставки, МРП и МЗП на 2025 год</p>
+        <p className="text-muted-foreground mt-1">Актуальные налоговые ставки, МРП и МЗП на {year} год</p>
       </div>
 
       {/* Ключевые показатели */}
@@ -63,7 +68,7 @@ export default function Rates() {
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           <Card>
             <CardHeader className="pb-1">
-              <CardDescription>МРП 2025</CardDescription>
+              <CardDescription>МРП {year}</CardDescription>
               <CardTitle className="text-2xl text-primary">{Number(mrp.value).toLocaleString("ru-KZ")} ₸</CardTitle>
             </CardHeader>
             <CardContent>
@@ -72,7 +77,7 @@ export default function Rates() {
           </Card>
           <Card>
             <CardHeader className="pb-1">
-              <CardDescription>МЗП 2025</CardDescription>
+              <CardDescription>МЗП {year}</CardDescription>
               <CardTitle className="text-2xl text-primary">{Number(mzp.value).toLocaleString("ru-KZ")} ₸</CardTitle>
             </CardHeader>
             <CardContent>
@@ -82,7 +87,11 @@ export default function Rates() {
           <Card>
             <CardHeader className="pb-1">
               <CardDescription>ИПН / КПН</CardDescription>
-              <CardTitle className="text-2xl text-primary">10% / 20%</CardTitle>
+              <CardTitle className="text-2xl text-primary">
+                {ipn ? `${Number(ipn.value).toFixed(0)}%` : "—"}
+                {ipn_high ? `/${Number(ipn_high.value).toFixed(0)}%` : ""}
+                {kpn ? ` / ${Number(kpn.value).toFixed(0)}%` : ""}
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-xs text-muted-foreground">Подоходный / корпоративный</p>
@@ -91,7 +100,7 @@ export default function Rates() {
           <Card>
             <CardHeader className="pb-1">
               <CardDescription>НДС</CardDescription>
-              <CardTitle className="text-2xl text-primary">12%</CardTitle>
+              <CardTitle className="text-2xl text-primary">{nds ? `${Number(nds.value).toFixed(0)}%` : "—"}</CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-xs text-muted-foreground">Налог на добавленную стоимость</p>
@@ -107,7 +116,7 @@ export default function Rates() {
             <BookOpen className="h-5 w-5" />
             Все ставки
           </CardTitle>
-          <CardDescription>Действует с 1 января 2025 года</CardDescription>
+          <CardDescription>Действует с 1 января {year} года</CardDescription>
         </CardHeader>
         <CardContent className="p-0">
           <Table>
