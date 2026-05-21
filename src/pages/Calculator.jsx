@@ -33,6 +33,8 @@ export default function CalculatorPage() {
   const [hasChild, setHasChild] = useState(false);
   const [childrenCount, setChildrenCount] = useState("1");
   const [entityType, setEntityType] = useState("ТОО");
+  const [hasAlimony, setHasAlimony] = useState(false);
+  const [alimonyChildren, setAlimonyChildren] = useState("1");
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -52,6 +54,7 @@ export default function CalculatorPage() {
         has_child_deduction: hasChild,
         children_count: hasChild ? Number(childrenCount) : 0,
         entity_type: entityType,
+        alimony_children: hasAlimony ? Number(alimonyChildren) : 0,
       });
       setResult(data);
     } catch (err) {
@@ -135,6 +138,38 @@ export default function CalculatorPage() {
                 )}
               </div>
 
+              <div className="space-y-3">
+                <div className="flex items-center gap-2">
+                  <Checkbox
+                    id="hasAlimony"
+                    checked={hasAlimony}
+                    onCheckedChange={setHasAlimony}
+                  />
+                  <Label htmlFor="hasAlimony" className="cursor-pointer">
+                    Удержание алиментов
+                  </Label>
+                </div>
+
+                {hasAlimony && (
+                  <div className="ml-6 space-y-1.5">
+                    <Label htmlFor="alimonyChildren">Количество детей</Label>
+                    <Select value={alimonyChildren} onValueChange={setAlimonyChildren}>
+                      <SelectTrigger className="w-48">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="1">1 ребёнок — 25%</SelectItem>
+                        <SelectItem value="2">2 детей — 33%</SelectItem>
+                        <SelectItem value="3">3 и более — 50%</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <p className="text-xs text-muted-foreground">
+                      Удерживается с суммы «на руки» (ст. 139 Кодекса о браке и семье РК)
+                    </p>
+                  </div>
+                )}
+              </div>
+
               {error && (
                 <div className="flex items-center gap-2 text-destructive text-sm">
                   <AlertCircle className="h-4 w-4" />
@@ -175,6 +210,16 @@ export default function CalculatorPage() {
                     <ResultRow label="  База ИПН" value={result.ipn_base} />
                     <ResultRow label="− ИПН (10%)" value={result.ipn} variant="deduction" />
                     <ResultRow label="На руки (net)" value={result.net_salary} variant="net" />
+                    {result.alimony > 0 && (
+                      <>
+                        <ResultRow
+                          label={`− Алименты (${Math.round(result.alimony_rate * 100)}%)`}
+                          value={result.alimony}
+                          variant="deduction"
+                        />
+                        <ResultRow label="К выдаче сотруднику" value={result.salary_after_alimony} variant="net" />
+                      </>
+                    )}
                   </TableBody>
                 </Table>
               </CardContent>
