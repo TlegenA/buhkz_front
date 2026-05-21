@@ -66,7 +66,7 @@ export default function App() {
         {/* Футер */}
         <footer className="border-t mt-auto">
           <div className="max-w-6xl mx-auto px-4 py-4 text-center text-sm text-muted-foreground">
-            Данные актуальны на 2025 год. Источник: kgd.gov.kz
+            © {new Date().getFullYear()} BuhKZ — налоговые ставки и дедлайны Казахстана
           </div>
         </footer>
       </div>
