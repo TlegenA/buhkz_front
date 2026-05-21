@@ -39,6 +39,11 @@ export default function CalculatorPage() {
 
   async function handleSubmit(e) {
     e.preventDefault();
+    const val = Number(gross);
+    if (!gross || val <= 0 || !Number.isFinite(val)) {
+      setError("Введите корректный оклад больше нуля");
+      return;
+    }
     setLoading(true);
     setError(null);
     try {
@@ -60,7 +65,7 @@ export default function CalculatorPage() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold tracking-tight">Калькулятор зарплаты</h1>
-        <p className="text-muted-foreground mt-1">Расчёт ОПВ, ИПН, ОСМС, СО и СН по ставкам 2025 года</p>
+        <p className="text-muted-foreground mt-1">Расчёт ОПВ, ИПН, ОСМС, СО и СН по ставкам {new Date().getFullYear()} года</p>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
@@ -74,14 +79,14 @@ export default function CalculatorPage() {
             <CardDescription>Введите оклад до вычета налогов</CardDescription>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-5">
+            <form onSubmit={handleSubmit} className="space-y-5" noValidate>
               <div className="space-y-1.5">
                 <Label htmlFor="gross">Оклад (тенге)</Label>
                 <Input
                   id="gross"
                   type="number"
-                  min="1"
-                  step="1000"
+                  min="0"
+                  step="1"
                   value={gross}
                   onChange={(e) => setGross(e.target.value)}
                   placeholder="200 000"
