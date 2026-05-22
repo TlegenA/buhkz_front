@@ -118,7 +118,7 @@ export default function CalculatorPage() {
                     onCheckedChange={setHasChild}
                   />
                   <Label htmlFor="hasChild" className="cursor-pointer">
-                    Вычет на детей (882 МРП/год на ребёнка)
+                    Вычет на детей-инвалидов (882 МРП/год)
                   </Label>
                 </div>
 
@@ -206,9 +206,9 @@ export default function CalculatorPage() {
                   <TableBody>
                     <ResultRow label="Оклад (gross)" value={result.gross} />
                     <ResultRow label="− ОПВ (10%)" value={result.opv} variant="deduction" />
-                    <ResultRow label="− ОСМС работника (2%)" value={result.osms_employee} variant="deduction" />
+                    <ResultRow label="− ВОСМС работника (2%)" value={result.osms_employee} variant="deduction" />
                     <ResultRow label="  База ИПН" value={result.ipn_base} />
-                    <ResultRow label="− ИПН (10%)" value={result.ipn} variant="deduction" />
+                    <ResultRow label={`− ИПН (${result.ipn_base > 1000000 ? "10%/15%" : "10%"})`} value={result.ipn} variant="deduction" />
                     <ResultRow label="На руки (net)" value={result.net_salary} variant="net" />
                     {result.alimony > 0 && (
                       <>
@@ -243,9 +243,10 @@ export default function CalculatorPage() {
                   </TableHeader>
                   <TableBody>
                     <ResultRow label="Оклад" value={result.gross} />
-                    <ResultRow label="+ СО (3.5%)" value={result.employer.so} variant="employer" />
-                    <ResultRow label="+ ОСМС работодателя (3%)" value={result.employer.osms_employer} variant="employer" />
-                    <ResultRow label="+ СН (9.5% − ОПВ − СО)" value={result.employer.sn} variant="employer" />
+                    <ResultRow label="+ ОПВР (3.5%)" value={result.employer.opvr} variant="employer" />
+                    <ResultRow label="+ СО (5%)" value={result.employer.so} variant="employer" />
+                    <ResultRow label="+ ООСМС работодателя (3%)" value={result.employer.osms_employer} variant="employer" />
+                    <ResultRow label="+ СН (6%)" value={result.employer.sn} variant="employer" />
                     <ResultRow label="Итого расход на сотрудника" value={result.employer.total_cost} variant="total" />
                   </TableBody>
                 </Table>
