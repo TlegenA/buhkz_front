@@ -35,7 +35,6 @@ export default function CalculatorPage() {
   const [entityType, setEntityType] = useState("ТОО");
   const [hasAlimony, setHasAlimony] = useState(false);
   const [alimonyChildren, setAlimonyChildren] = useState("1");
-  const [executorFee, setExecutorFee] = useState("");
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -56,7 +55,6 @@ export default function CalculatorPage() {
         children_count: hasChild ? Number(childrenCount) : 0,
         entity_type: entityType,
         alimony_children: hasAlimony ? Number(alimonyChildren) : 0,
-        executor_fee: executorFee ? Number(executorFee) : 0,
       });
       setResult(data);
     } catch (err) {
@@ -170,20 +168,6 @@ export default function CalculatorPage() {
                     </p>
                   </div>
                 )}
-              </div>
-
-              <div className="space-y-1.5">
-                <Label htmlFor="executorFee">Вознаграждение суд. исполнителя (тенге)</Label>
-                <Input
-                  id="executorFee"
-                  type="number"
-                  min="0"
-                  step="1"
-                  value={executorFee}
-                  onChange={(e) => setExecutorFee(e.target.value)}
-                  placeholder="0"
-                />
-                <p className="text-xs text-muted-foreground">Фиксированная сумма, если есть частный судебный исполнитель</p>
               </div>
 
               {error && (
