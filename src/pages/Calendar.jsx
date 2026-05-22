@@ -30,7 +30,7 @@ function formatDate(iso) {
 }
 
 function DeadlineCard({ deadline }) {
-  const { daysLeft } = deadline;
+  const daysLeft = deadline.days_left;
   return (
     <Card className={daysLeft <= 7 && daysLeft >= 0 ? "border-red-200 bg-red-50" : ""}>
       <CardHeader className="pb-2">
