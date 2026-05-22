@@ -7,6 +7,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 
 function formatValue(rate) {
   if (rate.unit === "percent") return `${Number(rate.value).toFixed(1)}%`;
+  if (rate.unit === "mrp") return `${Number(rate.value).toFixed(0)} МРП`;
   return Number(rate.value).toLocaleString("ru-KZ") + " ₸";
 }
 
