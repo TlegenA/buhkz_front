@@ -35,6 +35,7 @@ export default function CalculatorPage() {
   const [entityType, setEntityType] = useState("ТОО");
   const [hasAlimony, setHasAlimony] = useState(false);
   const [alimonyChildren, setAlimonyChildren] = useState("1");
+  const [executorFee, setExecutorFee] = useState("");
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -55,6 +56,7 @@ export default function CalculatorPage() {
         children_count: hasChild ? Number(childrenCount) : 0,
         entity_type: entityType,
         alimony_children: hasAlimony ? Number(alimonyChildren) : 0,
+        executor_fee: executorFee ? Number(executorFee) : 0,
       });
       setResult(data);
     } catch (err) {
@@ -170,6 +172,20 @@ export default function CalculatorPage() {
                 )}
               </div>
 
+              <div className="space-y-1.5">
+                <Label htmlFor="executorFee">Вознаграждение суд. исполнителя (тенге)</Label>
+                <Input
+                  id="executorFee"
+                  type="number"
+                  min="0"
+                  step="1"
+                  value={executorFee}
+                  onChange={(e) => setExecutorFee(e.target.value)}
+                  placeholder="0"
+                />
+                <p className="text-xs text-muted-foreground">Фиксированная сумма, если есть частный судебный исполнитель</p>
+              </div>
+
               {error && (
                 <div className="flex items-center gap-2 text-destructive text-sm">
                   <AlertCircle className="h-4 w-4" />
@@ -210,13 +226,22 @@ export default function CalculatorPage() {
                     <ResultRow label="  База ИПН" value={result.ipn_base} />
                     <ResultRow label={`− ИПН (${result.ipn_base > 1000000 ? "10%/15%" : "10%"})`} value={result.ipn} variant="deduction" />
                     <ResultRow label="На руки (net)" value={result.net_salary} variant="net" />
-                    {result.alimony > 0 && (
+                    {(result.alimony > 0 || result.executor_fee > 0) && (
                       <>
-                        <ResultRow
-                          label={`− Алименты (${Math.round(result.alimony_rate * 100)}%)`}
-                          value={result.alimony}
-                          variant="deduction"
-                        />
+                        {result.alimony > 0 && (
+                          <ResultRow
+                            label={`− Алименты (${Math.round(result.alimony_rate * 100)}%)`}
+                            value={result.alimony}
+                            variant="deduction"
+                          />
+                        )}
+                        {result.executor_fee > 0 && (
+                          <ResultRow
+                            label="− Вознаграждение суд. исполнителя"
+                            value={result.executor_fee}
+                            variant="deduction"
+                          />
+                        )}
                         <ResultRow label="К выдаче сотруднику" value={result.salary_after_alimony} variant="net" />
                       </>
                     )}
