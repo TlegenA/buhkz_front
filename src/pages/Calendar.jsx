@@ -102,7 +102,7 @@ export default function Calendar() {
       </div>
 
       {/* Фильтры */}
-      <div className="flex flex-wrap gap-4">
+      <div className="flex flex-wrap gap-4" style={{ position: "relative", zIndex: 10 }}>
         <div className="space-y-1.5">
           <Label>Месяц</Label>
           <Select value={month} onValueChange={setMonth}>
@@ -187,7 +187,7 @@ export default function Calendar() {
       )}
 
       {!loading && !error && deadlines.length > 0 && (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3" style={{ position: "relative", zIndex: 0 }}>
           {deadlines.map((d) => (
             <DeadlineCard key={d.id} deadline={d} />
           ))}
