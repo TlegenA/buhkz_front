@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import { BookOpen, AlertCircle, Clock } from "lucide-react";
+import { BookOpen, AlertCircle, Clock, History } from "lucide-react";
 import { api } from "@/api";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
 function formatValue(rate) {
   if (rate.unit === "percent") return `${Number(rate.value).toFixed(1)}%`;
@@ -15,39 +16,27 @@ function formatDate(iso) {
   return new Date(iso).toLocaleDateString("ru-KZ", { day: "numeric", month: "long", year: "numeric" });
 }
 
-// Карточки с ключевыми показателями (МРП, МЗП, ставки налогов)
-const KEY_CODES = ["mrp", "mzp", "opv", "ipn", "osms_emp", "osms_er", "so", "sn", "nds", "kpn"];
+function LoadingState() {
+  return (
+    <div className="flex items-center gap-2 text-muted-foreground py-12 justify-center">
+      <Clock className="h-5 w-5 animate-spin" />
+      Загрузка...
+    </div>
+  );
+}
 
-export default function Rates() {
-  const [rates, setRates] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+function ErrorState({ error }) {
+  return (
+    <div className="flex items-center gap-2 text-destructive py-6">
+      <AlertCircle className="h-5 w-5" />
+      Ошибка: {error}
+    </div>
+  );
+}
 
-  useEffect(() => {
-    api.getRates()
-      .then(setRates)
-      .catch((e) => setError(e.message))
-      .finally(() => setLoading(false));
-  }, []);
+// ─── Текущие ставки ────────────────────────────────────────────────────────────
 
-  if (loading) {
-    return (
-      <div className="flex items-center gap-2 text-muted-foreground py-12 justify-center">
-        <Clock className="h-5 w-5 animate-spin" />
-        Загрузка...
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="flex items-center gap-2 text-destructive py-6">
-        <AlertCircle className="h-5 w-5" />
-        Ошибка: {error}
-      </div>
-    );
-  }
-
+function CurrentRates({ rates }) {
   const byCode = Object.fromEntries(rates.map((r) => [r.code, r]));
   const mrp = byCode["mrp"];
   const mzp = byCode["mzp"];
@@ -59,12 +48,6 @@ export default function Rates() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold tracking-tight">Справочник ставок</h1>
-        <p className="text-muted-foreground mt-1">Актуальные налоговые ставки, МРП и МЗП на {year} год</p>
-      </div>
-
-      {/* Ключевые показатели */}
       {mrp && mzp && (
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           <Card>
@@ -110,7 +93,6 @@ export default function Rates() {
         </div>
       )}
 
-      {/* Полная таблица */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -152,6 +134,149 @@ export default function Rates() {
           </Table>
         </CardContent>
       </Card>
+    </div>
+  );
+}
+
+// ─── История изменений ──────────────────────────────────────────────────────────
+
+function changeBadge(prevRate, currRate) {
+  if (!prevRate || !currRate) return null;
+  const a = Number(prevRate.value);
+  const b = Number(currRate.value);
+  if (a === b) return null;
+  const diff = b - a;
+  const pct = a !== 0 ? ((diff / a) * 100).toFixed(1) : null;
+  const label = diff > 0 ? `+${pct}%` : `${pct}%`;
+  return (
+    <Badge variant={diff > 0 ? "destructive" : "success"} className="ml-1 text-xs">
+      {label}
+    </Badge>
+  );
+}
+
+function RatesHistory({ allRates }) {
+  const years = [...new Set(allRates.map((r) => new Date(r.valid_from).getFullYear()))].sort();
+  const byCodeYear = {};
+  for (const r of allRates) {
+    const yr = new Date(r.valid_from).getFullYear();
+    if (!byCodeYear[r.code]) byCodeYear[r.code] = { name: r.name, byYear: {} };
+    byCodeYear[r.code].byYear[yr] = r;
+    byCodeYear[r.code].name = r.name;
+  }
+  const codes = Object.keys(byCodeYear).sort();
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <History className="h-5 w-5" />
+          История изменений ставок
+        </CardTitle>
+        <CardDescription>Сравнение по годам: {years.join(", ")}</CardDescription>
+      </CardHeader>
+      <CardContent className="p-0">
+        <div className="overflow-x-auto">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="min-w-48">Показатель</TableHead>
+                <TableHead>Код</TableHead>
+                {years.map((y) => (
+                  <TableHead key={y} className="text-right">{y}</TableHead>
+                ))}
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {codes.map((code) => {
+                const entry = byCodeYear[code];
+                return (
+                  <TableRow key={code}>
+                    <TableCell className="font-medium">{entry.name}</TableCell>
+                    <TableCell>
+                      <Badge variant="outline" className="font-mono text-xs">{code}</Badge>
+                    </TableCell>
+                    {years.map((yr, i) => {
+                      const rate = entry.byYear[yr];
+                      const prevRate = i > 0 ? entry.byYear[years[i - 1]] : null;
+                      return (
+                        <TableCell key={yr} className="text-right font-mono">
+                          {rate ? (
+                            <span className="inline-flex items-center justify-end gap-1">
+                              <span className={i === years.length - 1 ? "text-primary font-semibold" : "text-muted-foreground"}>
+                                {formatValue(rate)}
+                              </span>
+                              {i > 0 && changeBadge(prevRate, rate)}
+                            </span>
+                          ) : (
+                            <span className="text-muted-foreground">—</span>
+                          )}
+                        </TableCell>
+                      );
+                    })}
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+// ─── Страница ──────────────────────────────────────────────────────────────────
+
+export default function Rates() {
+  const [rates, setRates] = useState([]);
+  const [allRates, setAllRates] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    Promise.all([api.getRates(), api.getAllRates()])
+      .then(([current, all]) => {
+        setRates(current);
+        setAllRates(all);
+      })
+      .catch((e) => setError(e.message))
+      .finally(() => setLoading(false));
+  }, []);
+
+  if (loading) return <LoadingState />;
+  if (error) return <ErrorState error={error} />;
+
+  return (
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-2xl font-bold tracking-tight">Справочник ставок</h1>
+        <p className="text-muted-foreground mt-1">
+          Актуальные налоговые ставки, МРП и МЗП на {new Date().getFullYear()} год
+        </p>
+      </div>
+
+      <Tabs defaultValue="current">
+        <TabsList>
+          <TabsTrigger value="current" className="flex items-center gap-1.5">
+            <BookOpen className="h-4 w-4" />
+            Актуальные
+          </TabsTrigger>
+          <TabsTrigger value="history" className="flex items-center gap-1.5">
+            <History className="h-4 w-4" />
+            История изменений
+          </TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="current">
+          <CurrentRates rates={rates} />
+        </TabsContent>
+        <TabsContent value="history">
+          {allRates.length > 0
+            ? <RatesHistory allRates={allRates} />
+            : <div className="text-muted-foreground py-8 text-center">Нет исторических данных</div>
+          }
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }

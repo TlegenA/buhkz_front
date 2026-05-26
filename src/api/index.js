@@ -47,4 +47,13 @@ export const api = {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
     }),
+
+  calcIp: (body) =>
+    request("/calculator/ip", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    }),
+
+  getAllRates: () => request("/rates/all"),
 };

@@ -1,13 +1,15 @@
 import { BrowserRouter, NavLink, Routes, Route, Navigate } from "react-router-dom";
-import { CalendarDays, Calculator, BookOpen, BarChart3 } from "lucide-react";
+import { CalendarDays, Calculator, BookOpen, BarChart3, Briefcase } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Calendar from "@/pages/Calendar";
 import CalculatorPage from "@/pages/Calculator";
 import Rates from "@/pages/Rates";
+import IpCalculatorPage from "@/pages/IpCalculator";
 
 const NAV_ITEMS = [
   { to: "/calendar",    label: "Календарь",    icon: CalendarDays },
   { to: "/calculator",  label: "Калькулятор",  icon: Calculator   },
+  { to: "/ip",          label: "ИП",           icon: Briefcase    },
   { to: "/rates",       label: "Ставки",       icon: BookOpen     },
 ];
 
@@ -59,6 +61,7 @@ export default function App() {
             <Route path="/" element={<Navigate to="/calendar" replace />} />
             <Route path="/calendar" element={<Calendar />} />
             <Route path="/calculator" element={<CalculatorPage />} />
+            <Route path="/ip" element={<IpCalculatorPage />} />
             <Route path="/rates" element={<Rates />} />
           </Routes>
         </main>
