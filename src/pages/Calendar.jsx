@@ -102,11 +102,11 @@ export default function Calendar() {
       </div>
 
       {/* Фильтры */}
-      <div className="flex flex-wrap gap-4">
+      <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-4">
         <div className="space-y-1.5">
           <Label>Месяц</Label>
           <Select value={month} onValueChange={setMonth}>
-            <SelectTrigger className="w-40">
+            <SelectTrigger className="w-full sm:w-40">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -122,7 +122,7 @@ export default function Calendar() {
         <div className="space-y-1.5">
           <Label>Год</Label>
           <Select value={year} onValueChange={setYear}>
-            <SelectTrigger className="w-28">
+            <SelectTrigger className="w-full sm:w-28">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -136,7 +136,7 @@ export default function Calendar() {
         <div className="space-y-1.5">
           <Label>Тип организации</Label>
           <Select value={entityType} onValueChange={setEntityType}>
-            <SelectTrigger className="w-36">
+            <SelectTrigger className="w-full sm:w-36">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -151,7 +151,7 @@ export default function Calendar() {
         <div className="space-y-1.5">
           <Label>Режим налогообложения</Label>
           <Select value={taxRegime} onValueChange={setTaxRegime}>
-            <SelectTrigger className="w-40">
+            <SelectTrigger className="w-full sm:w-40">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>

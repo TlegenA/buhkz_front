@@ -74,7 +74,7 @@ function IpTaxForm() {
               <Select value={mode} onValueChange={(v) => { setMode(v); setResult(null); }}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="simplified">Упрощённая декларация (3%) — форма 910</SelectItem>
+                  <SelectItem value="simplified">Упрощённая декларация (4%) — форма 910</SelectItem>
                   <SelectItem value="patent">Патент (1%) — форма 911</SelectItem>
                 </SelectContent>
               </Select>
@@ -146,7 +146,7 @@ function IpTaxForm() {
                 Налоги к уплате за {result.period_months} мес.
               </CardTitle>
             </CardHeader>
-            <CardContent className="p-0">
+            <CardContent className="p-0 overflow-x-auto">
               <Table>
                 <TableHeader>
                   <TableRow>
@@ -345,14 +345,14 @@ export default function IpCalculatorPage() {
       </div>
 
       <Tabs defaultValue="tax">
-        <TabsList>
-          <TabsTrigger value="tax" className="flex items-center gap-1.5">
+        <TabsList className="w-full overflow-x-auto justify-start sm:justify-center sm:w-auto">
+          <TabsTrigger value="tax" className="flex items-center gap-1.5 shrink-0">
             <Briefcase className="h-4 w-4" />
-            Налоги ИП
+            <span className="hidden sm:inline">Налоги ИП</span>
           </TabsTrigger>
-          <TabsTrigger value="nds" className="flex items-center gap-1.5">
+          <TabsTrigger value="nds" className="flex items-center gap-1.5 shrink-0">
             <ShieldAlert className="h-4 w-4" />
-            Порог НДС
+            <span className="hidden sm:inline">Порог НДС</span>
           </TabsTrigger>
         </TabsList>
         <TabsContent value="tax"><IpTaxForm /></TabsContent>

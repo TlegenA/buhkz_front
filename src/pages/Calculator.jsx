@@ -49,7 +49,7 @@ function SalaryResults({ result }) {
             Удержания с сотрудника
           </CardTitle>
         </CardHeader>
-        <CardContent className="p-0">
+        <CardContent className="p-0 overflow-x-auto">
           <Table>
             <TableHeader>
               <TableRow>
@@ -87,7 +87,7 @@ function SalaryResults({ result }) {
             Дополнительные расходы работодателя
           </CardTitle>
         </CardHeader>
-        <CardContent className="p-0">
+        <CardContent className="p-0 overflow-x-auto">
           <Table>
             <TableHeader>
               <TableRow>
@@ -331,7 +331,7 @@ function VacationForm() {
               Расчёт отпускных
             </CardTitle>
           </CardHeader>
-          <CardContent className="p-0">
+          <CardContent className="p-0 overflow-x-auto">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -458,7 +458,7 @@ function SickLeaveForm() {
               Расчёт больничных
             </CardTitle>
           </CardHeader>
-          <CardContent className="p-0">
+          <CardContent className="p-0 overflow-x-auto">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -508,22 +508,22 @@ export default function CalculatorPage() {
       </div>
 
       <Tabs defaultValue="salary">
-        <TabsList>
-          <TabsTrigger value="salary" className="flex items-center gap-1.5">
+        <TabsList className="w-full overflow-x-auto justify-start sm:justify-center sm:w-auto">
+          <TabsTrigger value="salary" className="flex items-center gap-1.5 shrink-0">
             <Calculator className="h-4 w-4" />
-            Зарплата
+            <span className="hidden sm:inline">Зарплата</span>
           </TabsTrigger>
-          <TabsTrigger value="reverse" className="flex items-center gap-1.5">
+          <TabsTrigger value="reverse" className="flex items-center gap-1.5 shrink-0">
             <RotateCcw className="h-4 w-4" />
-            Обратный расчёт
+            <span className="hidden sm:inline">Обратный расчёт</span>
           </TabsTrigger>
-          <TabsTrigger value="vacation" className="flex items-center gap-1.5">
+          <TabsTrigger value="vacation" className="flex items-center gap-1.5 shrink-0">
             <Umbrella className="h-4 w-4" />
-            Отпускные
+            <span className="hidden sm:inline">Отпускные</span>
           </TabsTrigger>
-          <TabsTrigger value="sick" className="flex items-center gap-1.5">
+          <TabsTrigger value="sick" className="flex items-center gap-1.5 shrink-0">
             <Stethoscope className="h-4 w-4" />
-            Больничные
+            <span className="hidden sm:inline">Больничные</span>
           </TabsTrigger>
         </TabsList>
 

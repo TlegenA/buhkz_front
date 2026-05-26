@@ -101,7 +101,7 @@ function CurrentRates({ rates }) {
           </CardTitle>
           <CardDescription>Действует с 1 января {year} года</CardDescription>
         </CardHeader>
-        <CardContent className="p-0">
+        <CardContent className="p-0 overflow-x-auto">
           <Table>
             <TableHeader>
               <TableRow>
@@ -175,7 +175,7 @@ function RatesHistory({ allRates }) {
         </CardTitle>
         <CardDescription>Сравнение по годам: {years.join(", ")}</CardDescription>
       </CardHeader>
-      <CardContent className="p-0">
+      <CardContent className="p-0 overflow-x-auto">
         <div className="overflow-x-auto">
           <Table>
             <TableHeader>

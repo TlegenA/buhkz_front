@@ -27,7 +27,7 @@ function NavItem({ to, label, icon: Icon }) {
       }
     >
       <Icon className="h-4 w-4" />
-      {label}
+      <span className="hidden sm:inline">{label}</span>
     </NavLink>
   );
 }
