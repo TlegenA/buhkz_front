@@ -157,17 +157,25 @@ function IpTaxForm() {
                 <TableBody>
                   <TableRow>
                     <TableCell className="text-muted-foreground">
-                      {result.mode === "simplified" ? "Единый налог (3%)" : "Стоимость патента (1%)"}
+                      {result.mode === "simplified" ? "Единый налог (4%)" : "Стоимость патента (1%)"}
                     </TableCell>
                     <TableCell className="text-right font-mono text-orange-600">{fmt(result.ip_tax)}</TableCell>
                   </TableRow>
                   <TableRow>
-                    <TableCell className="text-muted-foreground">ОПВ за себя (10%)</TableCell>
+                    <TableCell className="text-muted-foreground">ОПВ за себя (10%, мин. 1 МЗП)</TableCell>
                     <TableCell className="text-right font-mono text-orange-600">{fmt(result.opv)}</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell className="text-muted-foreground">ОПВР за себя (3.5%)</TableCell>
+                    <TableCell className="text-right font-mono text-orange-600">{fmt(result.opvr)}</TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell className="text-muted-foreground">ВОСМС за себя (5% от 1.4 МЗП)</TableCell>
                     <TableCell className="text-right font-mono text-orange-600">{fmt(result.osms)}</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell className="text-muted-foreground">СО за себя (5% от дохода − ОПВ)</TableCell>
+                    <TableCell className="text-right font-mono text-orange-600">{fmt(result.so)}</TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell className="font-semibold">Итого к уплате</TableCell>
