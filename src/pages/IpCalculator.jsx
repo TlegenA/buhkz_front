@@ -277,7 +277,7 @@ function NdsThresholdCalc() {
                   <span className="font-mono">{fmt(amount)}</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Порог НДС (20 000 МРП)</span>
+                  <span className="text-muted-foreground">Порог НДС (30 000 МРП)</span>
                   <span className="font-mono">{fmt(NDS_THRESHOLD)}</span>
                 </div>
                 <div className="flex justify-between text-sm font-medium border-t pt-3">
