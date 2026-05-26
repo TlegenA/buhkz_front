@@ -40,9 +40,12 @@ function makeEmployee(overrides = {}) {
 function useLocalEmployees() {
   const [employees, setEmployees] = useState(loadFromStorage);
 
-  const save = useCallback((next) => {
-    setEmployees(next);
-    saveToStorage(next);
+  const save = useCallback((nextOrUpdater) => {
+    setEmployees((prev) => {
+      const next = typeof nextOrUpdater === "function" ? nextOrUpdater(prev) : nextOrUpdater;
+      saveToStorage(next);
+      return next;
+    });
   }, []);
 
   const add = useCallback(() => {
