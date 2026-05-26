@@ -1,5 +1,4 @@
 import { useState } from "react";
-import * as XLSX from "xlsx";
 import { Users, Plus, Trash2, Calculator, Download, AlertCircle } from "lucide-react";
 import { api } from "@/api";
 import { useEmployees } from "@/hooks/useEmployees";
@@ -245,79 +244,21 @@ function PayrollSheet({ result, period }) {
   );
 }
 
-// ─── Экспорт в Excel ──────────────────────────────────────────────────────────
+// ─── Экспорт в Excel (через backend / openpyxl) ───────────────────────────────
 
-function exportToExcel(result, period) {
-  const wb = XLSX.utils.book_new();
-
-  // Лист 1: начисления
-  const accrualHeader = ["№", "ФИО", "Должность", "Оклад (брутто)", "ОПВ", "ВОСМС", "ИПН", "Алименты", "Вознагр. исп.", "К выплате"];
-  const accrualRows = result.employees.map((emp, i) => [
-    i + 1,
-    emp.name || "",
-    emp.position || "",
-    emp.gross,
-    emp.opv,
-    emp.osms_employee,
-    emp.ipn,
-    emp.alimony,
-    emp.executor_fee,
-    emp.to_pay,
-  ]);
-  const accrualTotals = [
-    "ИТОГО", "", "",
-    result.totals.gross,
-    result.totals.opv,
-    result.totals.osms_employee,
-    result.totals.ipn,
-    result.totals.alimony,
-    result.totals.executor_fee,
-    result.totals.to_pay,
-  ];
-
-  const ws1 = XLSX.utils.aoa_to_sheet([
-    [`Расчётная ведомость — ${period}`],
-    [],
-    accrualHeader,
-    ...accrualRows,
-    accrualTotals,
-  ]);
-  ws1["!cols"] = [{ wch: 4 }, { wch: 30 }, { wch: 20 }, { wch: 16 }, { wch: 12 }, { wch: 12 }, { wch: 12 }, { wch: 12 }, { wch: 14 }, { wch: 14 }];
-  XLSX.utils.book_append_sheet(wb, ws1, "Начисления");
-
-  // Лист 2: расходы работодателя
-  const employerHeader = ["№", "ФИО", "Оклад", "ОПВР", "СО", "ООСМС", "СН", "Итого затрат"];
-  const employerRows = result.employees.map((emp, i) => [
-    i + 1,
-    emp.name || "",
-    emp.gross,
-    emp.opvr,
-    emp.so,
-    emp.osms_employer,
-    emp.sn,
-    emp.total_cost,
-  ]);
-  const employerTotals = [
-    "ИТОГО", "",
-    result.totals.gross,
-    result.totals.opvr,
-    result.totals.so,
-    result.totals.osms_employer,
-    result.totals.sn,
-    result.totals.total_cost,
-  ];
-
-  const ws2 = XLSX.utils.aoa_to_sheet([
-    [`Расходы работодателя — ${period}`],
-    [],
-    employerHeader,
-    ...employerRows,
-    employerTotals,
-  ]);
-  ws2["!cols"] = [{ wch: 4 }, { wch: 30 }, { wch: 14 }, { wch: 12 }, { wch: 12 }, { wch: 12 }, { wch: 12 }, { wch: 16 }];
-  XLSX.utils.book_append_sheet(wb, ws2, "Расходы работодателя");
-
-  XLSX.writeFile(wb, `Ведомость_${period.replace(" ", "_")}.xlsx`);
+async function exportToExcel(employees, period, setExporting) {
+  setExporting(true);
+  try {
+    const blob = await api.exportPayroll({ employees, period });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `Vedomost_${period.replace(/ /g, "_")}.xlsx`;
+    a.click();
+    URL.revokeObjectURL(url);
+  } finally {
+    setExporting(false);
+  }
 }
 
 // ─── Страница ─────────────────────────────────────────────────────────────────
@@ -328,6 +269,7 @@ export default function PayrollPage() {
   const [month, setMonth] = useState(String(now.getMonth() + 1).padStart(2, "0"));
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [exporting, setExporting] = useState(false);
   const [error, setError] = useState(null);
 
   const { employees, add, update, remove } = useEmployees();
@@ -389,9 +331,13 @@ export default function PayrollPage() {
         </div>
         <div className="flex items-center gap-2 ml-auto flex-wrap justify-end">
           {result && (
-            <Button variant="outline" onClick={() => exportToExcel(result, period)}>
+            <Button
+              variant="outline"
+              disabled={exporting}
+              onClick={() => exportToExcel(employees.filter(e => e.gross_salary > 0), period, setExporting)}
+            >
               <Download className="h-4 w-4 mr-1.5" />
-              <span className="hidden sm:inline">Скачать</span> Excel
+              {exporting ? "Формирую..." : <><span className="hidden sm:inline">Скачать</span> Excel</>}
             </Button>
           )}
           <Button onClick={handleCalculate} disabled={loading || activeCount === 0}>
