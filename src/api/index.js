@@ -26,4 +26,25 @@ export const api = {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
     }),
+
+  calcReverse: (body) =>
+    request("/calculator/reverse", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    }),
+
+  calcVacation: (body) =>
+    request("/calculator/vacation", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    }),
+
+  calcSickLeave: (body) =>
+    request("/calculator/sick-leave", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    }),
 };
