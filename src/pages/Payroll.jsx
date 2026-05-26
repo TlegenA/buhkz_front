@@ -1,7 +1,8 @@
-import { useState } from "react";
-import { Users, Plus, Trash2, Calculator, Download, AlertCircle } from "lucide-react";
+import { useState, useRef } from "react";
+import * as XLSX from "xlsx";
+import { Users, Plus, Trash2, Calculator, Download, Upload, AlertCircle } from "lucide-react";
 import { api } from "@/api";
-import { useEmployees } from "@/hooks/useEmployees";
+import { useEmployees, makeEmployee } from "@/hooks/useEmployees";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -261,6 +262,48 @@ async function exportToExcel(employees, period, setExporting) {
   }
 }
 
+// ─── Импорт из Excel ──────────────────────────────────────────────────────────
+
+async function parseImportFile(file) {
+  const buffer = await file.arrayBuffer();
+  const wb = XLSX.read(buffer, { type: "array" });
+
+  // Приоритет: скрытый лист _data (полные данные включая дети/алименты)
+  if (wb.SheetNames.includes("_data")) {
+    const rows = XLSX.utils.sheet_to_json(wb.Sheets["_data"]);
+    if (rows.length === 0) throw new Error("Лист _data пуст");
+    return rows.map((row) =>
+      makeEmployee({
+        name: String(row.name || ""),
+        position: String(row.position || ""),
+        gross_salary: Number(row.gross_salary) || 0,
+        children: Number(row.children) || 0,
+        alimony_children: Number(row.alimony_children) || 0,
+      })
+    );
+  }
+
+  // Fallback: лист «Начисления» — только ФИО, должность, оклад
+  const sheet = wb.Sheets["Начисления"];
+  if (sheet) {
+    // range: 2 = начать с 3-й строки (0-индекс) которая содержит шапку
+    const rows = XLSX.utils.sheet_to_json(sheet, { range: 2 });
+    const employees = rows
+      .filter((r) => r["ФИО"] && String(r["ФИО"]).trim() !== "ИТОГО")
+      .map((r) =>
+        makeEmployee({
+          name: String(r["ФИО"] || ""),
+          position: String(r["Должность"] || ""),
+          gross_salary: Number(r["Оклад\n(брутто)"] || r["Оклад (брутто)"] || 0),
+        })
+      );
+    if (employees.length === 0) throw new Error("Не найдено данных в листе «Начисления»");
+    return employees;
+  }
+
+  throw new Error("Файл не содержит листов «_data» или «Начисления»");
+}
+
 // ─── Страница ─────────────────────────────────────────────────────────────────
 
 export default function PayrollPage() {
@@ -271,8 +314,9 @@ export default function PayrollPage() {
   const [loading, setLoading] = useState(false);
   const [exporting, setExporting] = useState(false);
   const [error, setError] = useState(null);
+  const fileInputRef = useRef(null);
 
-  const { employees, add, update, remove } = useEmployees();
+  const { employees, add, update, remove, replace } = useEmployees();
 
   const period = periodLabel(year, month);
 
@@ -291,6 +335,20 @@ export default function PayrollPage() {
       setError(e.message);
     } finally {
       setLoading(false);
+    }
+  }
+
+  async function handleImport(e) {
+    const file = e.target.files[0];
+    e.target.value = "";  // сбросить чтобы можно было повторно загрузить тот же файл
+    if (!file) return;
+    setError(null);
+    try {
+      const imported = await parseImportFile(file);
+      replace(imported);
+      setResult(null);
+    } catch (err) {
+      setError(`Импорт: ${err.message}`);
     }
   }
 
@@ -330,6 +388,17 @@ export default function PayrollPage() {
           </select>
         </div>
         <div className="flex items-center gap-2 ml-auto flex-wrap justify-end">
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept=".xlsx"
+            className="hidden"
+            onChange={handleImport}
+          />
+          <Button variant="outline" onClick={() => fileInputRef.current.click()}>
+            <Upload className="h-4 w-4 mr-1.5" />
+            <span className="hidden sm:inline">Импорт</span>
+          </Button>
           {result && (
             <Button
               variant="outline"
