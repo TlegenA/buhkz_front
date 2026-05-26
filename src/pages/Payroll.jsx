@@ -23,6 +23,11 @@ function periodLabel(year, month) {
   return `${MONTHS[Number(month) - 1]} ${year}`;
 }
 
+// Блокирует ввод символов, недопустимых в натуральных числах
+function blockNonNumeric(e) {
+  if (["-", "+", "e", "E", "."].includes(e.key)) e.preventDefault();
+}
+
 // ─── Таблица редактирования сотрудников ───────────────────────────────────────
 
 function EmployeeTable({ employees, onUpdate, onRemove, onAdd }) {
@@ -36,7 +41,7 @@ function EmployeeTable({ employees, onUpdate, onRemove, onAdd }) {
               Сотрудники
             </CardTitle>
             <CardDescription className="mt-1">
-              Список сохраняется в браузере автоматически
+              Список сохраняется в браузере автоматически. Чтобы восстановить сотрудников из прошлого месяца — нажмите «Импорт» и загрузите ранее скачанную ведомость .xlsx.
             </CardDescription>
           </div>
           <Button size="sm" onClick={onAdd} className="shrink-0">
@@ -88,7 +93,11 @@ function EmployeeTable({ employees, onUpdate, onRemove, onAdd }) {
                       min="0"
                       step="1000"
                       value={emp.gross_salary || ""}
-                      onChange={(e) => onUpdate(emp.id, { gross_salary: Number(e.target.value) })}
+                      onKeyDown={blockNonNumeric}
+                      onChange={(e) => {
+                        const val = Math.max(0, Math.floor(Number(e.target.value) || 0));
+                        onUpdate(emp.id, { gross_salary: val });
+                      }}
                       placeholder="300 000"
                       className="h-8 min-w-32"
                     />
@@ -99,7 +108,11 @@ function EmployeeTable({ employees, onUpdate, onRemove, onAdd }) {
                       min="0"
                       max="10"
                       value={emp.children || ""}
-                      onChange={(e) => onUpdate(emp.id, { children: Number(e.target.value) })}
+                      onKeyDown={blockNonNumeric}
+                      onChange={(e) => {
+                        const val = Math.min(10, Math.max(0, Math.floor(Number(e.target.value) || 0)));
+                        onUpdate(emp.id, { children: val });
+                      }}
                       placeholder="0"
                       className="h-8 w-14 text-center mx-auto"
                     />
@@ -110,7 +123,11 @@ function EmployeeTable({ employees, onUpdate, onRemove, onAdd }) {
                       min="0"
                       max="10"
                       value={emp.alimony_children || ""}
-                      onChange={(e) => onUpdate(emp.id, { alimony_children: Number(e.target.value) })}
+                      onKeyDown={blockNonNumeric}
+                      onChange={(e) => {
+                        const val = Math.min(10, Math.max(0, Math.floor(Number(e.target.value) || 0)));
+                        onUpdate(emp.id, { alimony_children: val });
+                      }}
                       placeholder="0"
                       className="h-8 w-14 text-center mx-auto"
                     />
@@ -395,7 +412,11 @@ export default function PayrollPage() {
             className="hidden"
             onChange={handleImport}
           />
-          <Button variant="outline" onClick={() => fileInputRef.current.click()}>
+          <Button
+            variant="outline"
+            onClick={() => fileInputRef.current.click()}
+            title="Загрузите ранее экспортированную ведомость (.xlsx), чтобы восстановить список сотрудников"
+          >
             <Upload className="h-4 w-4 mr-1.5" />
             <span className="hidden sm:inline">Импорт</span>
           </Button>
