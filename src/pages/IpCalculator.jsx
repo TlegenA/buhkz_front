@@ -11,7 +11,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 
 const MRP_2026 = 4_325;
-const NDS_THRESHOLD = 20_000 * MRP_2026; // 86 500 000 тг
+const NDS_THRESHOLD = 30_000 * MRP_2026; // 129 750 000 тг (ст. 82 НК РК)
 
 function fmt(n) {
   return n?.toLocaleString("ru-KZ") + " ₸";
@@ -241,7 +241,7 @@ function NdsThresholdCalc() {
             Контроль порога НДС
           </CardTitle>
           <CardDescription>
-            При превышении 20 000 МРП ({fmt(NDS_THRESHOLD)}) в год необходима постановка на учёт по НДС
+            При превышении 30 000 МРП ({fmt(NDS_THRESHOLD)}) в год необходима постановка на учёт по НДС
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-5">
@@ -300,7 +300,7 @@ function NdsThresholdCalc() {
                   <ShieldAlert className="h-4 w-4 mt-0.5 shrink-0" />
                   <span>
                     Порог превышен. Необходимо встать на учёт по НДС в течение 10 рабочих дней
-                    (ст. 82 НК РК). Ставка НДС — 12%.
+                    (ст. 82 НК РК). Ставка НДС — 16%.
                   </span>
                 </div>
               ) : pct >= 85 ? (
