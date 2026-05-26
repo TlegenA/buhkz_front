@@ -56,4 +56,11 @@ export const api = {
     }),
 
   getAllRates: () => request("/rates/all"),
+
+  calcPayroll: (body) =>
+    request("/calculator/payroll", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    }),
 };
