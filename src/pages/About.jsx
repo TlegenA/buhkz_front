@@ -125,7 +125,7 @@ export default function AboutPage() {
       <div>
         <h1 className="text-2xl font-bold tracking-tight">О проекте</h1>
         <p className="text-muted-foreground mt-2 leading-relaxed">
-          <strong>BuhKZ</strong> — бесплатный онлайн-сервис для бухгалтеров и предпринимателей Казахстана.
+          <strong>BuhBase</strong> — бесплатный онлайн-сервис для бухгалтеров и предпринимателей Казахстана.
           Помогает быстро считать налоги, отслеживать дедлайны отчётности и формировать расчётные ведомости
           без лишних таблиц и сложных программ.
         </p>

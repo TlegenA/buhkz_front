@@ -48,7 +48,7 @@ export default function App() {
           <div className="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between gap-4">
             <div className="flex items-center gap-2 font-bold text-lg">
               <BarChart3 className="h-5 w-5 text-primary" />
-              <span>BuhKZ</span>
+              <span>BuhBase</span>
               <span className="text-xs font-normal text-muted-foreground hidden sm:inline">
                 — сервис для бухгалтеров Казахстана
               </span>
@@ -78,7 +78,7 @@ export default function App() {
         {/* Футер */}
         <footer className="border-t mt-auto">
           <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between text-sm text-muted-foreground">
-            <span>© {new Date().getFullYear()} BuhKZ</span>
+            <span>© {new Date().getFullYear()} BuhBase</span>
             <div className="flex items-center gap-4">
               <a
                 href={`https://t.me/${TG_USERNAME}`}

@@ -9,7 +9,7 @@
 import { useState, useCallback } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 
-const STORAGE_KEY = "buhkz_employees";
+const STORAGE_KEY = "buhbase_employees";
 
 function loadFromStorage() {
   try {
