@@ -64,6 +64,13 @@ export const api = {
       body: JSON.stringify(body),
     }),
 
+  submitFeedback: (body) =>
+    request("/feedback", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    }),
+
   exportPayroll: async (body) => {
     const url = BASE + "/api/calculator/payroll/export";
     const res = await fetch(url, {
