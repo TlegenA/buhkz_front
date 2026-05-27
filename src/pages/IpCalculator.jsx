@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Helmet } from "react-helmet-async";
 import { Briefcase, AlertCircle, TrendingUp, ShieldAlert } from "lucide-react";
 import { api } from "@/api";
 import { Button } from "@/components/ui/button";
@@ -337,6 +338,11 @@ function NdsThresholdCalc() {
 export default function IpCalculatorPage() {
   return (
     <div className="space-y-6">
+      <Helmet>
+        <title>Калькулятор налогов ИП Казахстан | BuhBase</title>
+        <meta name="description" content="Расчёт налогов для ИП Казахстана: упрощённая декларация (3%) и патент (1%) с учётом ОПВ, ОПВР, СО и ОСМС. Актуальные ставки 2026." />
+        <link rel="canonical" href="https://buhbase.kz/ip" />
+      </Helmet>
       <div>
         <h1 className="text-2xl font-bold tracking-tight">Инструменты для ИП</h1>
         <p className="text-muted-foreground mt-1">

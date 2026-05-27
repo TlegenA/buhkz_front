@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Helmet } from "react-helmet-async";
 import {
   CalendarDays, Calculator, Briefcase, FileSpreadsheet, BookOpen,
   Send, Mail, CheckCircle2, AlertCircle, MessageSquare, Info,
@@ -121,6 +122,11 @@ function FeedbackForm() {
 export default function AboutPage() {
   return (
     <div className="space-y-8 max-w-3xl">
+      <Helmet>
+        <title>О проекте | BuhBase</title>
+        <meta name="description" content="BuhBase — бесплатный онлайн-сервис для бухгалтеров и предпринимателей Казахстана. Налоговый календарь, калькуляторы, расчётная ведомость." />
+        <link rel="canonical" href="https://buhbase.kz/about" />
+      </Helmet>
       {/* Заголовок */}
       <div>
         <h1 className="text-2xl font-bold tracking-tight">О проекте</h1>

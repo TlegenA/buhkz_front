@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import { Helmet } from "react-helmet-async";
 import * as XLSX from "xlsx";
 import { Users, Plus, Trash2, Calculator, Download, Upload, AlertCircle } from "lucide-react";
 import { api } from "@/api";
@@ -373,6 +374,11 @@ export default function PayrollPage() {
 
   return (
     <div className="space-y-6">
+      <Helmet>
+        <title>Расчётная ведомость зарплаты | BuhBase</title>
+        <meta name="description" content="Пакетный расчёт зарплаты всех сотрудников с выгрузкой в Excel. ОПВ, ВОСМС, ИПН, алименты, расходы работодателя. Бесплатно." />
+        <link rel="canonical" href="https://buhbase.kz/payroll" />
+      </Helmet>
       <div>
         <h1 className="text-2xl font-bold tracking-tight">Расчётная ведомость</h1>
         <p className="text-muted-foreground mt-1">

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Helmet } from "react-helmet-async";
 import { CalendarDays, AlertCircle, Clock } from "lucide-react";
 import { api } from "@/api";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -96,6 +97,11 @@ export default function Calendar() {
 
   return (
     <div className="space-y-6">
+      <Helmet>
+        <title>Налоговый календарь 2026 | BuhBase</title>
+        <meta name="description" content="Календарь сроков сдачи отчётности и уплаты налогов в Казахстане на 2026 год. КПН, ИПН, НДС, СН, ОПВ, ВОСМС, ОСМС." />
+        <link rel="canonical" href="https://buhbase.kz/calendar" />
+      </Helmet>
       <div>
         <h1 className="text-2xl font-bold tracking-tight">Налоговый календарь</h1>
         <p className="text-muted-foreground mt-1">Дедлайны по сдаче отчётности и уплате налогов</p>

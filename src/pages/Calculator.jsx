@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Helmet } from "react-helmet-async";
 import { Calculator, TrendingDown, TrendingUp, AlertCircle, RotateCcw, Umbrella, Stethoscope } from "lucide-react";
 import { api } from "@/api";
 import { Button } from "@/components/ui/button";
@@ -500,6 +501,11 @@ function SickLeaveForm() {
 export default function CalculatorPage() {
   return (
     <div className="space-y-6">
+      <Helmet>
+        <title>Калькулятор зарплаты Казахстан | BuhBase</title>
+        <meta name="description" content="Онлайн-расчёт зарплаты брутто и нетто с учётом ОПВ, ВОСМС, ИПН и алиментов. Обратный расчёт нетто → брутто. Актуальные ставки 2026." />
+        <link rel="canonical" href="https://buhbase.kz/calculator" />
+      </Helmet>
       <div>
         <h1 className="text-2xl font-bold tracking-tight">Калькулятор</h1>
         <p className="text-muted-foreground mt-1">

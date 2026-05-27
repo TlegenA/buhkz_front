@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Helmet } from "react-helmet-async";
 import { BookOpen, AlertCircle, Clock, History } from "lucide-react";
 import { api } from "@/api";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -248,6 +249,11 @@ export default function Rates() {
 
   return (
     <div className="space-y-6">
+      <Helmet>
+        <title>Налоговые ставки Казахстан 2026 | BuhBase</title>
+        <meta name="description" content="Актуальные ставки налогов и взносов Казахстана на 2026 год: КПН, ИПН, НДС, ОПВ, ВОСМС, ОПВР, СО, СН и МРП, МЗП." />
+        <link rel="canonical" href="https://buhbase.kz/rates" />
+      </Helmet>
       <div>
         <h1 className="text-2xl font-bold tracking-tight">Справочник ставок</h1>
         <p className="text-muted-foreground mt-1">
