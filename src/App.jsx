@@ -8,7 +8,7 @@ import IpCalculatorPage from "@/pages/IpCalculator";
 import PayrollPage from "@/pages/Payroll";
 import AboutPage from "@/pages/About";
 
-const TG_USERNAME = "YOUR_TG_USERNAME"; // заменить на реальный username
+const TG_USERNAME = "Tlegenabd";
 const CONTACT_EMAIL = "tlegen2011@gmail.com";
 
 const NAV_ITEMS = [
