@@ -7,6 +7,9 @@ import Rates from "@/pages/Rates";
 import IpCalculatorPage from "@/pages/IpCalculator";
 import PayrollPage from "@/pages/Payroll";
 import AboutPage from "@/pages/About";
+import PrivacyPage from "@/pages/Privacy";
+import TermsPage from "@/pages/Terms";
+import { CookieBanner } from "@/components/CookieBanner";
 
 const TG_USERNAME = "Tlegenabd";
 const CONTACT_EMAIL = "tlegen2011@gmail.com";
@@ -72,14 +75,22 @@ export default function App() {
             <Route path="/payroll" element={<PayrollPage />} />
             <Route path="/rates" element={<Rates />} />
             <Route path="/about" element={<AboutPage />} />
+            <Route path="/privacy" element={<PrivacyPage />} />
+            <Route path="/terms" element={<TermsPage />} />
           </Routes>
         </main>
 
         {/* Футер */}
         <footer className="border-t mt-auto">
-          <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between text-sm text-muted-foreground">
+          <div className="max-w-6xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-2 text-sm text-muted-foreground">
             <span>© {new Date().getFullYear()} BuhBase</span>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4 flex-wrap">
+              <NavLink to="/privacy" className="hover:text-foreground transition-colors text-xs">
+                Политика конфиденциальности
+              </NavLink>
+              <NavLink to="/terms" className="hover:text-foreground transition-colors text-xs">
+                Соглашение
+              </NavLink>
               <a
                 href={`https://t.me/${TG_USERNAME}`}
                 target="_blank"
@@ -99,6 +110,7 @@ export default function App() {
             </div>
           </div>
         </footer>
+        <CookieBanner />
       </div>
     </BrowserRouter>
   );
