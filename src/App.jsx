@@ -1,5 +1,5 @@
 import { BrowserRouter, NavLink, Routes, Route, Navigate } from "react-router-dom";
-import { CalendarDays, Calculator, BookOpen, BarChart3, Briefcase, FileSpreadsheet, Info, Send, Mail } from "lucide-react";
+import { CalendarDays, Calculator, BookOpen, BarChart3, Briefcase, FileSpreadsheet, Info, Send, Mail, HeartHandshake } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Calendar from "@/pages/Calendar";
 import CalculatorPage from "@/pages/Calculator";
@@ -7,6 +7,7 @@ import Rates from "@/pages/Rates";
 import IpCalculatorPage from "@/pages/IpCalculator";
 import PayrollPage from "@/pages/Payroll";
 import AboutPage from "@/pages/About";
+import BenefitsPage from "@/pages/Benefits";
 import PrivacyPage from "@/pages/Privacy";
 import TermsPage from "@/pages/Terms";
 import { CookieBanner } from "@/components/CookieBanner";
@@ -20,6 +21,7 @@ const NAV_ITEMS = [
   { to: "/ip",          label: "ИП",           icon: Briefcase         },
   { to: "/payroll",     label: "Ведомость",    icon: FileSpreadsheet   },
   { to: "/rates",       label: "Ставки",       icon: BookOpen          },
+  { to: "/benefits",    label: "Пособия",      icon: HeartHandshake    },
   { to: "/about",       label: "О проекте",    icon: Info              },
 ];
 
@@ -75,6 +77,7 @@ export default function App() {
             <Route path="/payroll" element={<PayrollPage />} />
             <Route path="/rates" element={<Rates />} />
             <Route path="/about" element={<AboutPage />} />
+            <Route path="/benefits" element={<BenefitsPage />} />
             <Route path="/privacy" element={<PrivacyPage />} />
             <Route path="/terms" element={<TermsPage />} />
           </Routes>
